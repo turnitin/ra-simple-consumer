@@ -1,25 +1,15 @@
 # Instructions -- see README.md in this directory
 import argparse
 import re
-
+import urllib3
 import lti
 import requests
 
+# see: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+urllib3.disable_warnings()
 
-def consume():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--context_id', help='Context (class) identifier, arbitrary', required=True)
-    parser.add_argument('--email', help='User email')
-    parser.add_argument('--env', help='Environment', default='staging')
-    parser.add_argument('--first', help='User first name', required=True)
-    parser.add_argument('--key', help='Consumer key', required=True)
-    parser.add_argument('--last', help='User last name', required=True)
-    parser.add_argument('--resource_link_id', help='Resource link (assignment) identifier, arbitrary', required=True)
-    parser.add_argument('--role', help='Role, either "Learner" or "Instructor"', default='Instructor')
-    parser.add_argument('--secret', help='Consumer secret', required=True)
-    parser.add_argument('--user_id', help='User ID, arbitrary', required=True)
-    args = parser.parse_args()
 
+def consume(args):
     launch_params = {
         'context_id': args.context_id,
         'context_title': 'A test class',
@@ -51,7 +41,9 @@ def consume():
         headers=launch_request.headers, data=launch_request.body,
         allow_redirects=False, verify=False)
     print("Status: {}".format(response.status_code))
-    if response.status_code == 302:
+    if 'entered a valid consumer key and secret' in response.text:
+        print("FAIL: Invalid consumer key/secret")
+    elif response.status_code == 302:
         for header in sorted(response.headers):
             print("  {}: {}".format(header, response.headers[header]))
         if 'Location' in response.headers:
@@ -75,4 +67,17 @@ def consume():
 
 
 if __name__ == '__main__':
-    consume()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--context_id', help='Context (class) identifier, arbitrary', required=True)
+    parser.add_argument('--email', help='User email')
+    parser.add_argument('--env', help='Environment', default='staging')
+    parser.add_argument('--first', help='User first name', required=True)
+    parser.add_argument('--key', help='Consumer key', required=True)
+    parser.add_argument('--last', help='User last name', required=True)
+    parser.add_argument('--resource_link_id', help='Resource link (assignment) identifier, arbitrary', required=True)
+    parser.add_argument('--role', help='Role, either "Learner" or "Instructor"', default='Instructor')
+    parser.add_argument('--secret', help='Consumer secret', required=True)
+    parser.add_argument('--user_id', help='User ID, arbitrary', required=True)
+    args = parser.parse_args()
+
+    consume(args)
