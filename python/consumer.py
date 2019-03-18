@@ -95,13 +95,13 @@ if __name__ == '__main__':
     ''')
 
     # launch
-    parser.add_argument('--context_id', required=True, help='''
+    parser.add_argument('--context-id', required=True, help='''
         Context (class) identifier, arbitrary and defined by you (required)
     ''')
     parser.add_argument('--email', help='''
         Launching user's email, blank if not provided (blank ok)
     ''')
-    parser.add_argument('--ext-grader_id', help='''
+    parser.add_argument('--ext-grader-id', help='''
         Prompt to launch into with slug provided by Revision Assistant team (don't
         use this unless you know what you're doing)
     ''')
@@ -111,13 +111,13 @@ if __name__ == '__main__':
     parser.add_argument('--last', required=True, help='''
         Launching user's last name (required)
     ''')
-    parser.add_argument('--resource_link_id', required=True, help='''
+    parser.add_argument('--resource-link-id', required=True, help='''
         Resource link (assignment) identifier, arbitrary and defined by you (required)
     ''')
     parser.add_argument('--role', default='Instructor', help='''
         Role, either "Learner" or "Instructor" (default)
     ''')
-    parser.add_argument('--user_id', required=True, help='''
+    parser.add_argument('--user-id', required=True, help='''
         Launching user's external identifier, arbitrary and defined by you (required)
     ''')
     args = parser.parse_args()

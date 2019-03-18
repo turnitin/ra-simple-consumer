@@ -26,8 +26,8 @@ $ docker run --rm ra-consumer --help
 # get a launch URL
 $ docker run --rm ra-consumer \
     --env production --key HoneyBees --secret CanSting \
-    --first Charlie --last Brown --email charlie.brown@peanuts.com --user_id ABCDE \
-    --context_id ABCDE --resource_link_id ABCDE
+    --first Charlie --last Brown --email charlie.brown@peanuts.com --user-id ABCDE \
+    --context-id ABCDE --resource-link-id ABCDE
 
 https://lti.revisionassistant.com/frap/#/lti/jrntuw9k0kdr24ur6ce8svrfedlwj9ie5xs19y6xrkt80fcy/41ho1H0
 ```
@@ -49,8 +49,8 @@ them from the Revision Assistant engineering team:
 ```
 $ python consumer.py \
     --env staging --key HoneyBees --secret CanSting \
-    --first Charlie --last Brown --email charlie.brown@peanuts.com --user_id ABCDE \
-    --context_id ABCDE --resource_link_id ABCDE 
+    --first Charlie --last Brown --email charlie.brown@peanuts.com --user-id ABCDE \
+    --context-id ABCDE --resource-link-id ABCDE 
 https://staging-lti.revisionassistant.com/frap/#/lti/jrntuw9k0kdr24ur6ce8svrfedlwj9ie5xs19y6xrkt80fcy/41ho1H0
 ```
 
