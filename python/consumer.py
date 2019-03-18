@@ -39,11 +39,17 @@ def consume(args):
     tool_consumer = lti.ToolConsumer(
         args.key, args.secret, params=launch_params, launch_url=launch_url)
     launch_request = tool_consumer.generate_launch_request()
+    if args.verbose:
+        print("HEADERS:")
+        for header_name in sorted(launch_request.headers):
+            header_value = launch_request.headers[header_name]
+            print("  {}:  {}".format(header_name, header_value.decode('utf-8')))
+        print("BODY:\n{}\n\n".format(launch_request.body.decode('utf-8')))
     response = requests.post(
         launch_request.url,
         headers=launch_request.headers, data=launch_request.body,
         allow_redirects=False, verify=False)
-    print("Status: {}".format(response.status_code))
+    print(f"Status: {response.status_code}")
     if 'entered a valid consumer key and secret' in response.text:
         print("FAIL: Invalid consumer key/secret")
     elif response.status_code == 302:
@@ -72,9 +78,12 @@ def consume(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    # env
+    # env etc
     parser.add_argument('--env', default='production', help='''
         Revision Assistant environment to launch against, "staging" or "production" (default)
+    ''')
+    parser.add_argument('--verbose', action='store_true', help='''
+        If true we'll output the body and signature
     ''')
 
     # auth
