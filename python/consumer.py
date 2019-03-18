@@ -26,6 +26,9 @@ def consume(args):
         'user_id': args.user_id,
     }
 
+    if args.ext_grader_id:
+        launch_params['ext_grader_id'] = args.ext_grader_id
+
     if args.env == 'staging':
         launch_url = 'https://staging.tiiscoringengine.com/lti/1p0/launch'
     elif args.env == 'production':
@@ -68,16 +71,46 @@ def consume(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--context_id', help='Context (class) identifier, arbitrary', required=True)
-    parser.add_argument('--email', help='User email')
-    parser.add_argument('--env', help='Environment', default='staging')
-    parser.add_argument('--first', help='User first name', required=True)
-    parser.add_argument('--key', help='Consumer key', required=True)
-    parser.add_argument('--last', help='User last name', required=True)
-    parser.add_argument('--resource_link_id', help='Resource link (assignment) identifier, arbitrary', required=True)
-    parser.add_argument('--role', help='Role, either "Learner" or "Instructor"', default='Instructor')
-    parser.add_argument('--secret', help='Consumer secret', required=True)
-    parser.add_argument('--user_id', help='User ID, arbitrary', required=True)
+
+    # env
+    parser.add_argument('--env', default='production', help='''
+        Revision Assistant environment to launch against, "staging" or "production" (default)
+    ''')
+
+    # auth
+    parser.add_argument('--key', required=True, help='''
+        Consumer auth key, provided by Revision Assistant team (case-sensitive!)
+    ''')
+    parser.add_argument('--secret', required=True, help='''
+        Consumer auth secret, provided by Revision Assistant team (case-sensitive!)
+    ''')
+
+    # launch
+    parser.add_argument('--context_id', required=True, help='''
+        Context (class) identifier, arbitrary and defined by you (required)
+    ''')
+    parser.add_argument('--email', help='''
+        Launching user's email, blank if not provided (blank ok)
+    ''')
+    parser.add_argument('--ext-grader_id', help='''
+        Prompt to launch into with slug provided by Revision Assistant team (don't
+        use this unless you know what you're doing)
+    ''')
+    parser.add_argument('--first', required=True, help='''
+        Launching user's first name (required)
+    ''')
+    parser.add_argument('--last', required=True, help='''
+        Launching user's last name (required)
+    ''')
+    parser.add_argument('--resource_link_id', required=True, help='''
+        Resource link (assignment) identifier, arbitrary and defined by you (required)
+    ''')
+    parser.add_argument('--role', default='Instructor', help='''
+        Role, either "Learner" or "Instructor" (default)
+    ''')
+    parser.add_argument('--user_id', required=True, help='''
+        Launching user's external identifier, arbitrary and defined by you (required)
+    ''')
     args = parser.parse_args()
 
     consume(args)
